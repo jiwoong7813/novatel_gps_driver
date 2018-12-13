@@ -48,6 +48,7 @@
 #include <novatel_gps_msgs/Range.h>
 #include <novatel_gps_msgs/Time.h>
 #include <novatel_gps_msgs/Trackstat.h>
+#include <novatel_gps_msgs/DualantennaHeading.h>
 
 #include <novatel_gps_driver/binary_message.h>
 #include <novatel_gps_driver/nmea_sentence.h>

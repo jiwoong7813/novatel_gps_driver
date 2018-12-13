@@ -36,6 +36,8 @@
 
 #include <novatel_gps_msgs/NovatelSignalMask.h>
 
+#include <novatel_gps_msgs/NovatelSolutionSource.h>
+
 #include <stdint.h>
 
 /**
@@ -119,6 +121,9 @@ namespace novatel_gps_driver
       uint32_t status,
       novatel_gps_msgs::NovatelExtendedSolutionStatus& msg);
 
+  void GetSolutionSourceMessage(
+      uint32_t status,
+      novatel_gps_msgs::NovatelSolutionSource& msg);
 
   void GetNovatelReceiverStatusMessage(
       uint32_t status,

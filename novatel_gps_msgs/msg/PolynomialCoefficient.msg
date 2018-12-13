@@ -1,0 +1,4 @@
+float64 C3_curvature_rate_divided_by_6
+float64 C2_curvature_divided_by_2
+float64 C1_heading_angle_error
+float64 C0_lateral_lane_center_offset

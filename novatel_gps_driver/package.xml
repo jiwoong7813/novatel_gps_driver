@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <package format="2">
   <name>novatel_gps_driver</name>
-  <version>3.6.0</version>
+  <version>3.5.0</version>
   <description>
   Driver for NovAtel receivers
   </description>
@@ -29,6 +29,9 @@
   <depend>swri_serial_util</depend>
   <depend>swri_string_util</depend>
   <depend>tf</depend>
+
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
   <export>
     <nodelet plugin="${prefix}/nodelet_plugins.xml"/>
   </export>

@@ -21,13 +21,11 @@ add_message_files(DIRECTORY msg FILES
   Gprmc.msg
   Inscov.msg
   Inspva.msg
-  Inspvax.msg
   Insstdev.msg
   NovatelCorrectedImuData.msg
   NovatelExtendedSolutionStatus.msg
   NovatelMessageHeader.msg
   NovatelPosition.msg
-  NovatelUtmPosition.msg
   NovatelReceiverStatus.msg
   NovatelSignalMask.msg
   NovatelVelocity.msg
@@ -37,6 +35,10 @@ add_message_files(DIRECTORY msg FILES
   Time.msg
   TrackstatChannel.msg
   Trackstat.msg
+  NovatelSolutionSource.msg
+  DualantennaHeading.msg
+  GRS80Coordinate.msg
+  PolynomialCoefficient.msg
 )
 generate_messages(DEPENDENCIES ${MSG_DEPS})
 catkin_package(

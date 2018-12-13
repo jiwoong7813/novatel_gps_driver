@@ -33,6 +33,8 @@
 #include <novatel_gps_msgs/NovatelExtendedSolutionStatus.h>
 #include <novatel_gps_msgs/NovatelSignalMask.h>
 
+#include <novatel_gps_msgs/NovatelSolutionSource.h>
+
 #include <ros/ros.h>
 
 namespace novatel_gps_driver
@@ -97,6 +99,26 @@ namespace novatel_gps_driver
       default:
         msg.psuedorange_iono_correction = "Unknown";
         break;
+    }
+  }
+
+  void GetSolutionSourceMessage(
+      uint32_t status,
+      novatel_gps_msgs::NovatelSolutionSource& msg)
+  {
+    msg.original_mask = status;
+    uint32_t source_antenna_mask = (0x0C & status) >> 2;
+    switch(source_antenna_mask)
+    {
+      case 0:
+	msg.source_antenna = "Primary antenna";
+	break;
+      case 1:
+	msg.source_antenna = "Secondary antenna";
+	break;
+      default:
+	msg.source_antenna = "Unknown";
+	break;
     }
   }
 
@@ -246,6 +268,4 @@ namespace novatel_gps_driver
     double degrees = static_cast<double>(whole_degrees) + minutes / 60.0;
     return degrees;
   }
-
-
 }

@@ -51,16 +51,15 @@
 #include <novatel_gps_msgs/Insstdev.h>
 #include <novatel_gps_msgs/NovatelCorrectedImuData.h>
 #include <novatel_gps_msgs/NovatelPosition.h>
-#include <novatel_gps_msgs/NovatelUtmPosition.h>
 #include <novatel_gps_msgs/NovatelVelocity.h>
 #include <novatel_gps_msgs/Range.h>
 #include <novatel_gps_msgs/Time.h>
 #include <novatel_gps_msgs/Trackstat.h>
+#include <novatel_gps_msgs/DualantennaHeading.h>
 
 #include <novatel_gps_driver/novatel_message_extractor.h>
 
 #include <novatel_gps_driver/parsers/bestpos.h>
-#include <novatel_gps_driver/parsers/bestutm.h>
 #include <novatel_gps_driver/parsers/bestvel.h>
 #include <novatel_gps_driver/parsers/corrimudata.h>
 #include <novatel_gps_driver/parsers/gpgga.h>
@@ -72,6 +71,7 @@
 #include <novatel_gps_driver/parsers/range.h>
 #include <novatel_gps_driver/parsers/time.h>
 #include <novatel_gps_driver/parsers/trackstat.h>
+#include <novatel_gps_driver/parsers/dualantennaheading.h>
 
 #include <sensor_msgs/Imu.h>
 #include <novatel_gps_driver/parsers/inscov.h>
@@ -197,12 +197,6 @@ namespace novatel_gps_driver
        */
       void GetNovatelPositions(std::vector<novatel_gps_msgs::NovatelPositionPtr>& positions);
       /**
-       * @brief Provides any BESTUTM messages that have been received since the
-       * last time this was called.
-       * @param[out] positions New BESTUTM messages.
-       */
-      void GetNovatelUtmPositions(std::vector<novatel_gps_msgs::NovatelUtmPositionPtr>& utm_positions);
-      /**
        * @brief Provides any BESTVEL messages that have been received since the
        * last time this was called.
        * @param[out] velocities New BESTVEL messages.
@@ -230,6 +224,9 @@ namespace novatel_gps_driver
       /**
        * @return true if we are connected to a NovAtel device, false otherwise.
        */
+
+      void GetDualantennaHeadingMessages(std::vector<novatel_gps_msgs::DualantennaHeadingPtr>& heading);
+
       bool IsConnected() { return is_connected_; }
 
       /**
@@ -260,12 +257,6 @@ namespace novatel_gps_driver
        * @param force If this value should be used instead of an autodetected one
        */
       void SetImuRate(double imu_rate, bool force = true);
-
-      /**
-       * @brief Sets the serial baud rate; should be called before configuring a serial connection.
-       * @param serial_baud_rate The serial baud rate.
-       */
-      void SetSerialBaud(int32_t serial_baud);
 
       /**
        * @brief Writes the given string of characters to a connected NovAtel device.
@@ -314,9 +305,9 @@ namespace novatel_gps_driver
       /**
        * @brief Establishes a serial port connection with a NovAtel device.
        *
-       * It will create a connection set at the baud set by SetSerialBaudRate(), no parity, 
-       * no flow control, and 8N1 bits, then it will call Configure() on that connection.  After
-       * this method has succeeded, RedData() and Write() can be used to communicate with
+       * It will create a connection set at 115200 baud, no parity, no flow control, and
+       * 8N1 bits, then it will call Configure() on that connection.  After this
+       * method has succeeded, RedData() and Write() can be used to communicate with
        * the device.
        *
        * @param device The device node to connect to; e. g., "/dev/ttyUSB0"
@@ -396,7 +387,6 @@ namespace novatel_gps_driver
       double utc_offset_;
 
       // Serial connection
-      int32_t serial_baud_;
       swri_serial_util::SerialPort serial_;
 
       // TCP / UDP connections
@@ -425,7 +415,6 @@ namespace novatel_gps_driver
 
       // Message parsers
       BestposParser bestpos_parser_;
-      BestutmParser bestutm_parser_;
       BestvelParser bestvel_parser_;
       CorrImuDataParser corrimudata_parser_;
       GpggaParser gpgga_parser_;
@@ -438,6 +427,7 @@ namespace novatel_gps_driver
       RangeParser range_parser_;
       TimeParser time_parser_;
       TrackstatParser trackstat_parser_;
+      DualantennaHeadingParser dualantennaheading_parser_;
 
       // Message buffers
       boost::circular_buffer<novatel_gps_msgs::NovatelCorrectedImuDataPtr> corrimudata_msgs_;
@@ -452,12 +442,12 @@ namespace novatel_gps_driver
       boost::circular_buffer<novatel_gps_msgs::InspvaPtr> inspva_msgs_;
       boost::circular_buffer<novatel_gps_msgs::InsstdevPtr> insstdev_msgs_;
       boost::circular_buffer<novatel_gps_msgs::NovatelPositionPtr> novatel_positions_;
-      boost::circular_buffer<novatel_gps_msgs::NovatelUtmPositionPtr> novatel_utm_positions_;
       boost::circular_buffer<novatel_gps_msgs::NovatelVelocityPtr> novatel_velocities_;
       boost::circular_buffer<novatel_gps_msgs::NovatelPositionPtr> position_sync_buffer_;
       boost::circular_buffer<novatel_gps_msgs::RangePtr> range_msgs_;
       boost::circular_buffer<novatel_gps_msgs::TimePtr> time_msgs_;
       boost::circular_buffer<novatel_gps_msgs::TrackstatPtr> trackstat_msgs_;
+      boost::circular_buffer<novatel_gps_msgs::DualantennaHeadingPtr> dualantennaheading_msgs_;
 
       // IMU data synchronization queues
       std::queue<novatel_gps_msgs::NovatelCorrectedImuDataPtr> corrimudata_queue_;

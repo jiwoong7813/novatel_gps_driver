@@ -1,0 +1,24 @@
+Header header
+
+NovatelMessageHeader novatel_msg_header
+
+string solution_status
+string position_type
+
+float32 length
+float32 heading
+float32 pitch
+
+float32 heading_standard_deviation_in_degrees
+float32 pitch_standard_deviation_in_degrees
+string station_id
+
+uint8 num_satellites_tracked
+uint8 num_satellites_used_in_solution
+uint8 num_satellites_above_the_elevation_mask_angle
+uint8 num_satellites_above_the_mask_angle_with_l2
+
+NovatelSolutionSource sol_source
+NovatelExtendedSolutionStatus extended_solution_status
+
+NovatelSignalMask signal_mask

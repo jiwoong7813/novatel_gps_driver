@@ -36,6 +36,7 @@
 #include <novatel_gps_driver/parsers/insstdev.h>
 #include <novatel_gps_driver/parsers/corrimudata.h>
 #include <novatel_gps_driver/parsers/inscov.h>
+#include <novatel_gps_driver/parsers/dualantennaheading.h>
 
 TEST(ParserTestSuite, testBestposAsciiParsing)
 {
@@ -272,7 +273,7 @@ TEST(ParserTestSuite, testInsstdevAsciiParsing)
   ASSERT_EQ(1, novatel_sentences.size());
 
   novatel_gps_driver::NovatelSentence sentence = novatel_sentences.front();
-
+2://github.com/ethz-asl/eigen_checks
   ASSERT_EQ(parser.GetMessageName() + "A", sentence.id);
 
   novatel_gps_msgs::InsstdevPtr msg = parser.ParseAscii(sentence);
@@ -289,6 +290,42 @@ TEST(ParserTestSuite, testInsstdevAsciiParsing)
   ASSERT_FLOAT_EQ(3.7534, msg->pitch_dev);
   ASSERT_FLOAT_EQ(5.1857, msg->azimuth_dev);
   ASSERT_EQ(26000005, msg->extended_solution_status.original_mask);
+}
+
+TEST(ParserTestSuite, testDualantennaheadingAsciiParsing)
+{
+  novatel_gps_driver::DualantennaHeadingParser parser;
+  std::string sentence_str = "#DUALANTENNAHEADINGA,UNKNOWN,0,66.5,FINESTEERING,1949,"
+      "575614.000,02000000,d426,32768;SOL_COMPUTED,NARROW_INT,-1.000000000,255.538528442,"
+      "0.006041416,0.0,0.043859947,0.052394450,\"J56X\",24,18,18,17,04,01,00,33*1f082ec5\r\n";
+  std::string extracted_str;
+
+  novatel_gps_driver::NovatelMessageExtractor extractor;
+
+  std::vector<novatel_gps_driver::NmeaSentence> nmea_sentences;
+  std::vector<novatel_gps_driver::NovatelSentence> novatel_sentences;
+  std::vector<novatel_gps_driver::BinaryMessage> binary_messages;
+  std::string remaining;
+
+  extractor.ExtractCompleteMessages(sentence_str, nmea_sentences, novatel_sentences,
+                                    binary_messages, remaining);
+
+  ASSERT_EQ(0, nmea_sentences.size());
+  ASSERT_EQ(0, binary_messages.size());
+  ASSERT_EQ(1, novatel_sentences.size());
+
+  novatel_gps_driver::NovatelSentence sentence = novatel_sentences.front();
+
+  ASSERT_EQ(parser.GetMessageName() + "A", sentence.id);
+
+  novatel_gps_msgs::DualantennaHeadingPtr msg = parser.ParseAscii(sentence);
+  //---------------------//
+  ASSERT_NE(msg.get(), nullptr);
+
+  ASSERT_EQ("SOL_COMPUTED", msg->solution_status);
+
+  ASSERT_FLOAT_EQ(255.538528442, msg->heading);
+  ASSERT_FLOAT_EQ(0.006041416, msg->pitch);
 }
 
 int main(int argc, char **argv)

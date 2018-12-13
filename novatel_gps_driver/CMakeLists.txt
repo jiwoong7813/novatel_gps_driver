@@ -40,7 +40,7 @@ else()
   set(libpcap_FOUND TRUE)
 endif()
 
-catkin_package(CATKIN_DEPENDS ${DEPS}
+catkin_package(CATKIN_DEPENDS ${DEPS} message_runtime
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME} ${PROJECT_NAME}_nodelets
   DEPENDS Boost libpcap
@@ -50,7 +50,6 @@ add_library(${PROJECT_NAME}
   src/novatel_gps.cpp
   src/novatel_message_extractor.cpp
   src/parsers/bestpos.cpp
-  src/parsers/bestutm.cpp
   src/parsers/bestvel.cpp
   src/parsers/corrimudata.cpp
   src/parsers/gpgga.cpp
@@ -60,13 +59,16 @@ add_library(${PROJECT_NAME}
   src/parsers/header.cpp
   src/parsers/inscov.cpp
   src/parsers/inspva.cpp
-  src/parsers/inspvax.cpp
   src/parsers/insstdev.cpp
   src/parsers/parsing_utils.cpp
   src/parsers/range.cpp
   src/parsers/time.cpp
   src/parsers/trackstat.cpp
+
+  src/parsers/dualantennaheading.cpp
+  src/conv_llh_to_xyz.cpp
 )
+
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}

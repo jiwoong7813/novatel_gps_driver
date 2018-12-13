@@ -7,7 +7,10 @@
       verbose: false
       connection_type: serial
       device: /dev/ttyUSB0
+      publish_dualantennaheading: true
       publish_novatel_positions: true
+      publish_nmea_messages: true
+      publish_imu: true
       frame_id: /gps
     </rosparam>
   </node>
